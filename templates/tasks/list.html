@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+{% block title %}My tasks{% endblock %}
+{% block content %}
+<div class="page-topline"><span>Your workspace</span><span class="private-label">{% include 'components/icon.html' with name='lock' %}Only yours</span></div>
+<header class="page-header">
+  <div><p class="eyebrow">Make room for good work.</p><h1>My tasks</h1><p class="page-intro">A clear list. One thing at a time.</p></div>
+  <a class="button" href="{% url 'tasks:create' %}">{% include 'components/icon.html' with name='plus' %}New task</a>
+</header>
+<section class="stats-grid" aria-label="Task overview">
+  <div class="stat"><span class="stat-label">All tasks</span><strong>{{ total_count }}</strong><span class="stat-icon">{% include 'components/icon.html' with name='tasks' %}</span></div>
+  <div class="stat"><span class="stat-label">Still to do</span><strong>{{ open_count }}</strong><span class="stat-icon stat-icon--orange">{% include 'components/icon.html' with name='clock' %}</span></div>
+  <div class="stat"><span class="stat-label">Completed</span><strong>{{ completed_count }}</strong><span class="stat-icon stat-icon--green">{% include 'components/icon.html' with name='check' %}</span></div>
+</section>
+<section class="surface task-surface" aria-label="Your task list">
+  <div class="list-toolbar">
+    <nav class="filter-tabs" aria-label="Filter tasks">
+      <a href="?status=all&amp;q={{ query|urlencode }}" {% if status == 'all' or not status %}aria-current="page"{% endif %}>All <span>{{ total_count }}</span></a>
+      <a href="?status=open&amp;q={{ query|urlencode }}" {% if status == 'open' %}aria-current="page"{% endif %}>Open <span>{{ open_count }}</span></a>
+      <a href="?status=done&amp;q={{ query|urlencode }}" {% if status == 'done' %}aria-current="page"{% endif %}>Completed <span>{{ completed_count }}</span></a>
+    </nav>
+    <form class="search-form" method="get" action="{% url 'tasks:list' %}" role="search">
+      <label class="sr-only" for="task-search">Search your task titles</label>
+      <input type="hidden" name="status" value="{{ status|default:'all' }}">
+      <div class="search-input">{% include 'components/icon.html' with name='search' %}<input id="task-search" type="search" name="q" value="{{ query }}" placeholder="Search tasks" maxlength="200"></div>
+      <button class="button button--secondary button--small" type="submit">Search</button>
+    </form>
+  </div>
+  {% if query %}<div class="search-caption">Results for <strong>“{{ query }}”</strong><a href="?status={{ status|default:'all'|urlencode }}">Clear search</a></div>{% endif %}
+  {% if page_obj %}
+  <ul class="task-list">
+    {% for task in page_obj %}
+    <li class="task-row{% if task.completed %} task-row--done{% endif %}">
+      <form class="task-toggle-form" action="{% url 'tasks:toggle' task.pk %}" method="post">
+        {% csrf_token %}<input type="hidden" name="q" value="{{ query }}"><input type="hidden" name="status" value="{{ status|default:'all' }}">
+        <button class="task-toggle" type="submit" aria-pressed="{% if task.completed %}true{% else %}false{% endif %}" aria-label="Mark {{ task.title }} {% if task.completed %}as open{% else %}as completed{% endif %}">{% if task.completed %}{% include 'components/icon.html' with name='check' %}{% endif %}</button>
+      </form>
+      <div class="task-content"><a class="task-title" href="{% url 'tasks:update' task.pk %}">{{ task.title }}</a><p class="row-meta">Task #{{ task.pk }}<span aria-hidden="true">·</span><span>{% if task.completed %}Completed{% else %}Open{% endif %}</span></p></div>
+      <div class="row-actions"><a href="{% url 'tasks:update' task.pk %}">Edit<span class="sr-only"> {{ task.title }}</span></a><a class="muted-action" href="{% url 'tasks:delete' task.pk %}">Delete<span class="sr-only"> {{ task.title }}</span></a></div>
+    </li>
+    {% endfor %}
+  </ul>
+  {% else %}
+  <div class="empty-state"><span class="empty-icon">{% include 'components/icon.html' with name='tasks' %}</span>
+    {% if query %}<h2>No matching tasks.</h2><p>Try another title or clear the search to see your list.</p><a class="button button--secondary" href="?status={{ status|default:'all'|urlencode }}">Clear search</a>
+    {% elif status == 'done' %}<h2>Good things take a first step.</h2><p>Tasks you complete will appear here. Choose an open task to get started.</p><a class="button button--secondary" href="?status=open">See open tasks</a>
+    {% elif status == 'open' and total_count %}<h2>A little breathing room.</h2><p>You’ve completed every task on your list.</p><a class="button button--secondary" href="{% url 'tasks:create' %}">Add your next task</a>
+    {% else %}<h2>Start with one small thing.</h2><p>Add a task you want to make progress on today.</p><a class="button" href="{% url 'tasks:create' %}">{% include 'components/icon.html' with name='plus' %}Create your first task</a>{% endif %}
+  </div>
+  {% endif %}
+  {% include 'components/pagination.html' %}
+  <div class="list-footer"><p>{{ page_obj.paginator.count }} task{{ page_obj.paginator.count|pluralize }} in this view</p><div class="task-progress"><label for="task-progress">{{ completed_count }} of {{ total_count }} completed</label><progress id="task-progress" value="{{ completed_count }}" max="{% if total_count %}{{ total_count }}{% else %}1{% endif %}">{{ completed_count }} of {{ total_count }}</progress></div></div>
+</section>
+<p class="page-note">{% include 'components/icon.html' with name='lock' %}Your workspace shows only the tasks you create.</p>
+{% endblock %}

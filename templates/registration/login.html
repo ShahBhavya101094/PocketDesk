@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+{% block title %}Sign in{% endblock %}
+{% block content %}
+<div class="auth-layout">
+  <section class="auth-intro"><a class="brand" href="{% url 'login' %}"><span class="brand-mark" aria-hidden="true"><span></span></span><span>PocketDesk</span></a><div class="auth-story"><p class="eyebrow">Your personal workspace</p><h1>A little space.<br>A lot more <em>done.</em></h1><p>Your tasks and useful notes,<br>together in one quiet workspace.</p><div class="auth-benefits"><p>{% include 'components/icon.html' with name='check' %}A clear list for your next step</p><p>{% include 'components/icon.html' with name='note' %}A place for things worth keeping</p><p>{% include 'components/icon.html' with name='lock' %}Records that belong to your account</p></div></div><p class="auth-footer">Small steps. Steady progress.</p></section>
+  <section class="auth-panel" aria-labelledby="login-heading"><div class="auth-form-wrap"><p class="eyebrow">Good to see you.</p><h2 id="login-heading">Welcome back.</h2><p class="auth-caption">Sign in to your PocketDesk workspace.</p>
+    <form method="post" action="{% url 'login' %}">{% csrf_token %}{% include 'components/form_fields.html' %}{% if next %}<input type="hidden" name="next" value="{{ next }}">{% endif %}<button class="button button--full" type="submit">Sign in{% include 'components/icon.html' with name='arrow' %}</button></form>
+    {% if public_signup_enabled %}<p class="auth-switch">New to PocketDesk? <a href="{% url 'signup' %}">Create an account</a></p>{% endif %}
+    <p class="auth-assurance">{% include 'components/icon.html' with name='lock' %}Your tasks. Your notes. Your space.</p>
+  </div></section>
+</div>
+{% endblock %}

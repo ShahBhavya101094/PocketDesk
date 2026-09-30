@@ -1,0 +1,7 @@
+{% extends 'base.html' %}
+{% block title %}Delete task{% endblock %}
+{% block content %}
+<a class="back-link" href="{% url 'tasks:list' %}">{% include 'components/icon.html' with name='back' %}My tasks</a>
+<section class="surface confirmation-card"><span class="danger-icon">{% include 'components/icon.html' with name='trash' %}</span><h1>Delete this task?</h1><p class="page-intro">This removes the task from your workspace. It cannot be undone.</p><blockquote class="record-preview">{{ object.title }}</blockquote>
+<form method="post">{% csrf_token %}<div class="form-actions"><button class="button button--danger" type="submit">Delete task</button><a class="button button--secondary" href="{% url 'tasks:list' %}">Keep task</a></div></form></section>
+{% endblock %}

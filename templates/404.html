@@ -1,0 +1,3 @@
+{% extends 'base.html' %}
+{% block title %}Page not found{% endblock %}
+{% block content %}<section class="error-page"><a class="brand" href="{% url 'tasks:list' %}"><span class="brand-mark" aria-hidden="true"><span></span></span><span>PocketDesk</span></a><p class="error-code">404</p><h1>This page isn’t in your workspace.</h1><p>The link may have changed, or the record may no longer be available to your account.</p><a class="button" href="{% url 'tasks:list' %}">{% include 'components/icon.html' with name='back' %}Back to my tasks</a></section>{% endblock %}

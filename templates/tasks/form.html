@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+{% block title %}{% if object %}Edit task{% else %}New task{% endif %}{% endblock %}
+{% block content %}
+<a class="back-link" href="{% url 'tasks:list' %}">{% include 'components/icon.html' with name='back' %}My tasks</a>
+<header class="page-header form-header"><div><p class="eyebrow">One clear next step.</p><h1>{% if object %}Edit task{% else %}Add a task{% endif %}</h1><p class="page-intro">Give your next step a name.</p></div></header>
+<div class="editor-layout"><section class="surface editor-card" aria-label="Task details"><form method="post">
+  {% csrf_token %}{% include 'components/form_fields.html' %}
+  <div class="form-actions"><button class="button" type="submit">{% if object %}Save changes{% else %}Save task{% endif %}</button><a class="button button--secondary" href="{% url 'tasks:list' %}">Cancel</a></div>
+</form></section><aside class="editor-guidance"><span class="guidance-icon">{% include 'components/icon.html' with name='tasks' %}</span><h2>Small and specific works well.</h2><p>“Prepare the Django demo” gives you a clearer next step than “Work on project.”</p><p class="guidance-detail">Your task belongs to your account. Other people cannot view or edit it.</p></aside></div>
+{% endblock %}

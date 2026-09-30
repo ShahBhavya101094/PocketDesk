@@ -1,0 +1,7 @@
+{% extends 'base.html' %}
+{% block title %}{% if object %}Edit note{% else %}New note{% endif %}{% endblock %}
+{% block content %}
+<a class="back-link" href="{% url 'entries:list' %}">{% include 'components/icon.html' with name='back' %}Saved notes</a>
+<header class="page-header form-header"><div><p class="eyebrow">Give a useful thing a home.</p><h1>{% if object %}Edit note{% else %}Save a note{% endif %}</h1><p class="page-intro">A short key makes it easy to find again.</p></div></header>
+<div class="editor-layout"><section class="surface editor-card" aria-label="Note details"><form method="post">{% csrf_token %}{% include 'components/form_fields.html' %}<div class="form-actions"><button class="button" type="submit">{% if object %}Save changes{% else %}Save note{% endif %}</button><a class="button button--secondary" href="{% url 'entries:list' %}">Cancel</a></div></form></section><aside class="editor-guidance"><span class="guidance-icon">{% include 'components/icon.html' with name='note' %}</span><h2>Name it for later.</h2><p>Try a key like <code>course_link</code> or <code>demo_checklist</code>. Each key is unique within your workspace.</p><div class="notice notice--stacked">{% include 'components/icon.html' with name='lock' %}<p>Useful notes only. Do not save passwords or API keys.</p></div></aside></div>
+{% endblock %}

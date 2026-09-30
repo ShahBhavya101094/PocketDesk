@@ -1,0 +1,8 @@
+{% extends 'base.html' %}
+{% block title %}Create an account{% endblock %}
+{% block content %}
+<div class="auth-layout">
+  <section class="auth-intro"><a class="brand" href="{% url 'login' %}"><span class="brand-mark" aria-hidden="true"><span></span></span><span>PocketDesk</span></a><div class="auth-story"><p class="eyebrow">Start with a little space.</p><h1>Make room<br>for your <em>next step.</em></h1><p>A personal place to keep your tasks<br>and the useful notes alongside them.</p><div class="auth-benefits"><p>{% include 'components/icon.html' with name='tasks' %}Turn plans into a clear task list</p><p>{% include 'components/icon.html' with name='note' %}Keep links and reminders close</p></div></div><p class="auth-footer">One account. Your own workspace.</p></section>
+  <section class="auth-panel" aria-labelledby="signup-heading"><div class="auth-form-wrap"><p class="eyebrow">A fresh page.</p><h2 id="signup-heading">Create your account.</h2><p class="auth-caption">Choose a username and a strong password.</p><form method="post">{% csrf_token %}{% include 'components/form_fields.html' %}<button class="button button--full" type="submit">Create account{% include 'components/icon.html' with name='arrow' %}</button></form><p class="auth-switch">Already have an account? <a href="{% url 'login' %}">Sign in</a></p></div></section>
+</div>
+{% endblock %}

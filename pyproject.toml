@@ -1,0 +1,35 @@
+[project]
+name = "pocketdesk"
+version = "1.0.0"
+description = "Django workshop: owner-scoped tasks and key/value notes"
+requires-python = ">=3.12,<3.15"
+dependencies = [
+    "Django==5.2.17",
+    "djangorestframework==3.18.1",
+    "django-axes==8.3.1",
+    "dj-database-url==3.1.2",
+    "psycopg[binary]==3.3.6",
+    "python-dotenv==1.2.3",
+]
+
+[tool.uv]
+package = false
+
+[tool.vercel]
+entrypoint = "config.wsgi:application"
+
+[tool.ruff]
+target-version = "py312"
+line-length = 100
+exclude = [".venv", "staticfiles"]
+
+[tool.ruff.lint]
+select = ["E4", "E7", "E9", "F", "I", "UP", "B"]
+
+[tool.coverage.run]
+branch = true
+source = ["accounts", "config", "tasks", "entries"]
+omit = ["*/migrations/*", "*/tests/*", "*/tests.py", "config/test_settings.py", "config/wsgi.py"]
+
+[tool.coverage.report]
+show_missing = true
